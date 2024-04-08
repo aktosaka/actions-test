@@ -8,20 +8,44 @@ on:
       - production
 
   workflow_dispatch:
-#    inputs:
-#      environment:
-#        description: Choose environment
-#        required: true
-#        type: choice
-#        options:
-#            - develop
-#            - staging
-#            - production
+    inputs:
+      environment:
+        description: Choose environment
+        required: true
+        type: choice
+        options:
+            - develop
+            - staging
+            - production
 
 jobs:
-  test:
+  deployment-on-dev:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    if: github.ref_name == 'develop'
+    environment: develop
     steps:
-      - name: echo-enviroment
-        run: echo ${{ github.ref_name }}
+      - name: echo secrets
+        run: echo ${{ secrets.SECRET_ENV_NAME }}
+      - name: echo variables
+        run: echo ${{ vars.NON_SECRET_ENV_NAME }}
+
+  deployment-on-stg:
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'staging'
+    environment: staging
+    steps:
+      - name: echo secrets
+        run: echo ${{ secrets.SECRET_ENV_NAME }}
+      - name: echo variables
+        run: echo ${{ vars.NON_SECRET_ENV_NAME }}
+      
+  deployment-on-prod:
+    runs-on: ubuntu-latest
+    if: github.ref_name == 'production'
+    environment: production
+    steps:
+      - name: echo secrets
+        run: echo ${{ secrets.SECRET_ENV_NAME }}
+      - name: echo variables
+        run: echo ${{ vars.NON_SECRET_ENV_NAME }}
+      
