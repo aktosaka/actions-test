@@ -1,0 +1,27 @@
+name: test
+
+on:
+  push:
+    branches:
+      - develop
+      - staging
+      - production
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Choose environment
+        required: true
+        type: choice
+        options:
+            - develop
+            - staging
+            - production
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: echo-enviroment
+        run: echo ${{ github.ref_name }}
