@@ -8,15 +8,15 @@ on:
       - production
 
   workflow_dispatch:
-    inputs:
-      environment:
-        description: Choose environment
-        required: true
-        type: choice
-        options:
-            - develop
-            - staging
-            - production
+#    inputs:
+#      environment:
+#        description: Choose environment
+#        required: true
+#        type: choice
+#        options:
+#            - develop
+#            - staging
+#            - production
 
 jobs:
   test:
