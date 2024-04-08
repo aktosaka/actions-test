@@ -26,17 +26,18 @@ jobs:
     steps:
       - name: echo variables
         run: echo ${{ vars.NON_SECRET_ENV_NAME }}
-      - name: echo variables
-        run: echo ${{ vars.NON_SECRET_ENV_NAME }}
+      - name: echo secrets
+        run: echo ${{ secrets.SECRET_ENV_NAME }}
+
   deployment-on-stg:
     runs-on: ubuntu-latest
     if: github.ref_name == 'staging'
     environment: staging
     steps:
-      - name: echo secrets
-        run: echo ${{ secrets.SECRET_ENV_NAME }}
       - name: echo variables
         run: echo ${{ vars.NON_SECRET_ENV_NAME }}
+      - name: echo secrets
+        run: echo ${{ secrets.SECRET_ENV_NAME }}
       
   deployment-on-prod:
     runs-on: ubuntu-latest
