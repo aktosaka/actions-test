@@ -28,6 +28,12 @@ jobs:
         run: echo ${{ vars.NON_SECRET_ENV_NAME }}
       - name: echo secrets
         run: echo ${{ secrets.SECRET_ENV_NAME }}
+      - name: create tag
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: dev ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
 
   deployment-on-stg:
     runs-on: ubuntu-latest
