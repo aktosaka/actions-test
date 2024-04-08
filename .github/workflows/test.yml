@@ -24,8 +24,6 @@ jobs:
     if: github.ref_name == 'develop'
     environment: develop
     steps:
-      - name: echo secrets
-        run: echo ${{ secrets.SECRET_ENV_NAME }}
       - name: echo variables
         run: echo ${{ vars.NON_SECRET_ENV_NAME }}
 
