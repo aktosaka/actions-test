@@ -1,63 +1,16 @@
 name: test
 
 on:
-  push:
-    branches:
-      - develop
-      - staging
-      - production
-
   workflow_dispatch:
-#    inputs:
-#      environment:
-#        description: Choose environment
-#        required: true
-#        type: choice
-#        options:
-#            - develop
-#            - staging
-#            - production
+
+env:
+  WORKING_DIRECTORY: ${{ github.ref_name == 'develop' && 'develop' || github.ref_name == 'staging' && 'staging' || '' }}
+
 
 jobs:
-  deployment-on-dev:
+  env-test:
     runs-on: ubuntu-latest
-    if: github.ref_name == 'develop'
-    environment: develop
+    if: env.WORKING_DIRECTORY != ''
     steps:
-      - name: echo variables
-        run: echo ${{ vars.NON_SECRET_ENV_NAME }}
-      - name: echo secrets
-        run: echo ${{ secrets.SECRET_ENV_NAME }}
-      - uses: actions/checkout@v4
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: create tag
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.tag_version.outputs.new_tag }}
-          name: dev ${{ steps.tag_version.outputs.new_tag }}
-          body: ${{ steps.tag_version.outputs.changelog }}
-
-  deployment-on-stg:
-    runs-on: ubuntu-latest
-    if: github.ref_name == 'staging'
-    environment: staging
-    steps:
-      - name: echo variables
-        run: echo ${{ vars.NON_SECRET_ENV_NAME }}
-      - name: echo secrets
-        run: echo ${{ secrets.SECRET_ENV_NAME }}
-      
-  deployment-on-prod:
-    runs-on: ubuntu-latest
-    if: github.ref_name == 'production'
-    environment: production
-    steps:
-      - name: echo variables
-        run: echo ${{ vars.NON_SECRET_ENV_NAME }}
-      - name: echo secrets
-        run: echo ${{ secrets.SECRET_ENV_NAME }}
-      
+      - name: echo WORKING_DIRECTORY
+        run: echo ${{ env.WORKING_DIRECTORY }}
